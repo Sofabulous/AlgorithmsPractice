@@ -11,6 +11,11 @@ enum QueueError: Error {
   case noSuchItem(String)
 }
 
+enum HeapType {
+    case MinHeap
+    case MaxHeap
+}
+
 class HeapPriorityQueue<DataType: Comparable> {
 
     /// 队列的存储
@@ -20,8 +25,19 @@ class HeapPriorityQueue<DataType: Comparable> {
     public var size: Int {
         return self.queue.count
     }
-
-    public init() {
+        
+    public let heapType:HeapType
+    
+    private let compare:(DataType, DataType) -> Bool
+        
+    public init(heapType:HeapType = .MinHeap) {
+        self.heapType = heapType
+        switch heapType {
+        case .MinHeap:
+            compare = (>)
+        case .MaxHeap:
+            compare = (<)
+        }
         self.queue = Array<DataType>()
     }
 }
@@ -83,8 +99,8 @@ extension HeapPriorityQueue: Queue {
         }
         var child = index
         var parent = index.parent
-
-        while parent >= 0 && self.queue[parent] > self.queue[child] {
+        
+        while parent >= 0 && compare(self.queue[parent], self.queue[child]) {
             self.swap(parent, with: child)
             child = parent
             parent = child.parent
@@ -104,14 +120,15 @@ extension HeapPriorityQueue: Queue {
             }
 
             let rightChild = parent.rightChild
-            var minChild = leftChild
-            if rightChild < self.queue.count &&  self.queue[minChild] > self.queue[rightChild] {
-                minChild = rightChild
+            var correctChild = leftChild
+            
+            if rightChild < self.queue.count && compare(self.queue[correctChild], self.queue[rightChild]) {
+                correctChild = rightChild
             }
 
-            if self.queue[parent] > self.queue[minChild] {
-                self.swap(parent, with: minChild)
-                parent = minChild
+            if compare(self.queue[parent], self.queue[correctChild]) {
+                self.swap(parent, with: correctChild)
+                parent = correctChild
             } else {
                 break
             }
