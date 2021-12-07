@@ -1,13 +1,14 @@
 //
-//  AlgorithmsTests.swift
-//  AlgorithmsTests
+//  AlgorithmsPracticeTests.swift
+//  AlgorithmsPracticeTests
 //
-//  Created by YuKun on 6.12.21.
+//  Created by YuKun on 7.12.21.
 //
 
 import XCTest
+@testable import AlgorithmsPractice
 
-class AlgorithmsTests: XCTestCase {
+class HeapPriorityQueueTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -20,6 +21,11 @@ class AlgorithmsTests: XCTestCase {
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let queue = HeapPriorityQueue<Int>()
+        queue.add(1)
+        queue.add(2)
+        queue.add(3)
+        assert(queue.peek() != nil && queue.peek()! == 1)
     }
 
     func testPerformanceExample() throws {
